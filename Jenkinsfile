@@ -1,17 +1,20 @@
 #!groovy
 
 node {
-
   stage "Verify author"
   def power_users = ["ktf", "dberzano"]
   def deployable_branches = ["master"]
   echo "Changeset from " + env.CHANGE_AUTHOR
-  if (power_users.contains(env.CHANGE_AUTHOR)) {
-    echo "PR comes from power user. Testing"
-  } else if(deployable_branches.containers(env.BRANCH_NAME)) {
+  echo "Target branch " + env.CHANGE_TARGET
+  echo "Branch name " + env.BRANCH_NAME
+
+  if (env.CHANGE_TARGET == null && env.BRANCH_NAME == "master") {
+    input "This branch will affect production. Are you sure you want to continue?"
     echo "Building master branch."
+  } else if (power_users.contains(env.CHANGE_AUTHOR)) {
+    echo "PR comes from power user. Publishing to aliswdev."
   } else {
-    input "Do you want to test this change?"
+    abort(1)
   }
 
   stage "Build containers"
