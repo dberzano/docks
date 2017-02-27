@@ -1,0 +1,11 @@
+#!/bin/bash -e
+printHelp() {
+  [[ $1 ]] && { echo "ERROR: $1"; echo; } >&2 || true
+  echo "Usage: docker run -it --rm -v /cvmfs:/cvmfs -e ALIENV_PACKAGES=... [-e ALIENV_NAMESPACE=...]" >&2
+  echo "Set ALIENV_NAMESPACE to, e.g., alice-nightlies.cern.ch if you do not want to use the default." >&2
+}
+ALIENV_NAMESPACE=${ALIENV_NAMESPACE:-"alice.cern.ch"}
+[[ $ALIENV_PACKAGES ]] || { printHelp "Missing packages specification (use ALIENV_PACKAGES)."; exit 1; }
+[[ -d /cvmfs/$ALIENV_NAMESPACE ]] || { printHelp "Missing /cvmfs/$ALIENV_NAMESPACE, did you expose it with -v?"; exit 1; }
+eval $(/cvmfs/$ALIENV_NAMESPACE/bin/alienv printenv $ALIENV_PACKAGES)
+exec "$@"
