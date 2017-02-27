@@ -1,0 +1,8 @@
+[{
+  "name": "build",
+  "scheduler_uri": "https://aliaurora.cern.ch",
+  "auth_mechanism": "COOKIE",
+  "cookie_jar": "~/.aurora-token",
+  "slave_run_directory": "latest",
+  "slave_root": "/build/mesos"
+}]
