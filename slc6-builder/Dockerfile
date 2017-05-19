@@ -45,8 +45,6 @@ RUN gpg2 --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3 && \
       rvm use 2.3.0 --default                                  && \
       gem install --no-ri --no-rdoc fpm"
 
-RUN echo 'source scl_source enable python27' > /etc/profile.d/scl_py27.sh
-
 COPY entrypoint.sh /usr/local/bin
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 CMD [ "bash" ]
