@@ -9,7 +9,6 @@ COPY mock-uname-slc6.sh /bin/uname
 RUN                                                                                         \
   rpm --rebuilddb                                                                        && \
   yum clean all                                                                          && \
-  rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt                                      && \
   yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm                                                 && \
   yum install -y http://mirror1.hs-esslingen.de/repoforge/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm && \
   yum install -y autoconf automake bc bzip2 bzip2-devel                                     \
@@ -27,6 +26,7 @@ RUN                                                                             
       openssl-static zlib zlib-static patch readline readline-devel                         \
       libyaml-devel libffi-devel iconv-devel environment-modules                         && \
   yum install -y git --enablerepo=rpmforge-extras                                        && \
+  yum install -y centos-release-SCL && yum install -y python27                           && \
   yum clean all                                                                          && \
   pip install bernhard
 
@@ -44,6 +44,8 @@ RUN gpg2 --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3 && \
       source /etc/profile.d/rvm.sh && rvm install 2.3.0        && \
       rvm use 2.3.0 --default                                  && \
       gem install --no-ri --no-rdoc fpm"
+
+RUN echo 'source scl_source enable python27' > /etc/profile.d/scl_py27.sh
 
 COPY entrypoint.sh /usr/local/bin
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
